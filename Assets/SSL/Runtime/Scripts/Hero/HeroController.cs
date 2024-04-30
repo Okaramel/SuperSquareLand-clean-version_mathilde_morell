@@ -32,7 +32,7 @@ public class HeroController : MonoBehaviour
 
         if (_entity.IsJumpImpulsing)
         {
-            if (!_entityInputJump() && _entity.IsJumpingMinDurationReached)
+            if (!_GetInputJump() && _entity.IsJumpMinDurationReached)
             {
                 _entity.StopJumpImpulsion();
             }
