@@ -1,5 +1,6 @@
 using System.Runtime.CompilerServices;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class HeroEntity : MonoBehaviour
@@ -11,10 +12,22 @@ public class HeroEntity : MonoBehaviour
     [SerializeField] private HeroHorizontalMovementSettings _movementsSettings;
     [SerializeField] private float _horizontalSpeed = 0f;
     private float _moveDirX = 0f;
+    private float _CountDownDash = -1f;
+
+    [Header("Dash")]
+    [SerializeField] private HeroDashSettings _dashSettings;
+    private float _moveDash = 0f;
+
 
     [Header("Orientation")]
     [SerializeField] private Transform _orientVisualRoot;
     private float _orientX = 1f;
+
+    [Header("Vertical Movements")]
+    private float _verticalSpeed = 0f;
+
+    [Header("Fall")]
+    [SerializeField] private HeroFallSettings _fallSettings;
 
     [Header("Debug")]
     [SerializeField] private bool _guiDebug = false;
@@ -34,7 +47,17 @@ public class HeroEntity : MonoBehaviour
             _UpdateHorizontalSpeed();
             _ChangeOrientFromHorizontalMovement();
         }
+        _ApplyFallGravity();
+  
         _ApplyHorizontalSpeed();
+        _ApplyVerticalSpeed();
+
+
+
+        if(_CountDownDash > 0)
+        {
+            _UpdateSpeedDash();
+        }
     }
 
     private void _ChangeOrientFromHorizontalMovement()
@@ -95,6 +118,39 @@ public class HeroEntity : MonoBehaviour
         }
     }
 
+    public void _StartDash()
+    {
+        _CountDownDash = _dashSettings.duration;
+    }
+
+    private void _UpdateSpeedDash()
+    {
+        if (_CountDownDash > 0f)
+        {
+            _CountDownDash -= Time.fixedDeltaTime;
+            _horizontalSpeed = _dashSettings.speed;
+        } else
+        {
+            _horizontalSpeed = _movementsSettings.speedMax;
+        }
+    }
+
+    private void _ApplyFallGravity()
+    {
+        _verticalSpeed -= _fallSettings.fallGrativy * Time.fixedDeltaTime;
+        if (_verticalSpeed < _fallSettings.fallSpeedMax)
+        {
+            _verticalSpeed = _fallSettings.fallSpeedMax;
+        }
+    }
+
+    private void _ApplyVerticalSpeed()
+    {
+        Vector2 velocity = _rigidbody.velocity;
+        velocity.y = _verticalSpeed;
+        _rigidbody.velocity = velocity;
+    }
+
     private void Update()
     {
         _UpdateOrientVisual();
@@ -114,7 +170,10 @@ public class HeroEntity : MonoBehaviour
         GUILayout.BeginVertical(GUI.skin.box);
         GUILayout.Label(gameObject.name);
         GUILayout.Label($"MoveDirX = {_moveDirX}");
-        GUILayout.Label($"OrientX = {_orientX}");
+        GUILayout.Label($"MoveDash = {_moveDash}");
+        GUILayout.Label($"MoveDash = {_moveDash}");
+        GUILayout.Label($"Horizontal Speed = {_horizontalSpeed}");
+        GUILayout.Label($"Vertical Speed = {_verticalSpeed}");
         GUILayout.Label($"Horizontal Speed = {_horizontalSpeed}");
         GUILayout.EndVertical();
     }
