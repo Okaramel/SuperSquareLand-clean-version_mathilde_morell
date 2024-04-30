@@ -273,6 +273,7 @@ public class HeroEntity : MonoBehaviour
 /*  private HeroHorizontalMovementSettings _GetCurrentHorizontalMovementsSettings() {
  *  return IsTouchingGround ? _groundHorizontalMovementsSettings : _airHorizontalMovementsSettings}*/
 
+
     private void Update()
     {
         _UpdateOrientVisual();

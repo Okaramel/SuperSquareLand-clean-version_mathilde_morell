@@ -9,6 +9,10 @@ public class HeroController : MonoBehaviour
     [Header("Debug")]
     [SerializeField] private bool _guiDebug = false;
 
+    [Header("Jump Buffer")]
+    [SerializeField] private float _jumpBufferDuration = 0.2f;
+    private float _jumpBufferTimer = 0f;
+
     private void OnGUI()
     {
         if (!_guiDebug) return;
@@ -19,13 +23,26 @@ public class HeroController : MonoBehaviour
     }
 
     private void Update()
+
     {
+        _UpdateJumpBuffer();
+
         _entity.SetMoveDirX(GetInputMoveX());
 
         if(_GetInputDownJump())
         {
             if(_entity.IsTouchingGround && !_entity.IsJumping)
             {
+                _entity.JumpStart();
+            } else
+            {
+                _ResetJumpBuffer();
+            }
+        }
+
+        if(IsJumperBufferActive())
+        {
+            if(_entity.IsTouchingGround && !_entity.IsJumping) {
                 _entity.JumpStart();
             }
         }
@@ -75,5 +92,32 @@ public class HeroController : MonoBehaviour
     private bool _GetInputJump()
     {
         return Input.GetKey(KeyCode.Space);
+    }
+
+    private void _ResetJumpBuffer()
+    {
+        _jumpBufferTimer = 0f;
+    }
+    private bool IsJumperBufferActive()
+    {
+        return _jumpBufferTimer < _jumpBufferDuration;
+    }
+
+    private void _UpdateJumpBuffer()
+    {
+        if (!IsJumperBufferActive()) return;
+        {
+            _jumpBufferTimer += Time.deltaTime;
+        }
+    }
+
+    private void _CancelJumpBuffer()
+    {
+        _jumpBufferTimer = _jumpBufferDuration;
+    }
+
+    private void Start()
+    {
+        _CancelJumpBuffer();
     }
 }
