@@ -249,6 +249,14 @@ public class HeroEntity : MonoBehaviour
         }
     }
 
+    public void StopJumpImpulsion()
+    {
+        _jumpState = JumpState.Falling;
+    }
+
+    public bool IsJumpImpulsing => _jumpState == JumpState.JumpImpulsion;
+    public bool IsJumpMinDurationReached => _jumpTimer >= _jumpSettings.jumpMinDuration;
+
     private void Update()
     {
         _UpdateOrientVisual();
