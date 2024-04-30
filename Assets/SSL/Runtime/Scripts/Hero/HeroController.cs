@@ -19,6 +19,7 @@ public class HeroController : MonoBehaviour
 
         GUILayout.BeginVertical(GUI.skin.box);
         GUILayout.Label(gameObject.name);
+        GUILayout.Label($"Jump Buffer Timer = {_jumpBufferTimer}");
         GUILayout.EndVertical();
     }
 
