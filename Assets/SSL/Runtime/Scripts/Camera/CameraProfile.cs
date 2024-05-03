@@ -1,7 +1,23 @@
-﻿using UnityEngine;
+﻿using System.Runtime.CompilerServices;
+using UnityEngine;
 
 public class CameraProfile : MonoBehaviour
 {
+
+    [Header("Type")]
+    [SerializeField] private CameraProfileType _profileType = CameraProfileType.Static;
+
+    [Header("Follow")]
+    [SerializeField] private Transform _targetToFollow = null;
+
+    public CameraProfileType ProfileType => _profileType;
+
+    public Transform TargetToFollow => _targetToFollow;
+    public enum CameraProfileType
+    {
+        Static = 0,
+        FollowTarget
+    }
     private Camera _camera;
 
     public float CameraSize => _camera.orthographicSize;
