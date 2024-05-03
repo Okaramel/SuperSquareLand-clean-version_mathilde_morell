@@ -163,7 +163,7 @@ public class HeroEntity : MonoBehaviour
 
    private void _UpdateSpeedDash(HeroHorizontalMovementSettings settings)
     {
-        if (IsDashing == true)
+        if (_CountDownDash > 0f)
         {
             IsDashing = true;
             _CountDownDash -= Time.fixedDeltaTime;
