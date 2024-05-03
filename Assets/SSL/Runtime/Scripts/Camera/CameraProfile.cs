@@ -20,7 +20,6 @@ public class CameraProfile : MonoBehaviour
     public bool UseDampingHorizontally => _useDampingHorizontally;
     public float HorizontalDampingFactor => _horizontalDampingFactor;
     public bool UseDampingVertically => _useDampingVertically;
-
     public float VerticalDampingFactor => _verticalDampingFactor;
 
     public CameraProfileType ProfileType => _profileType;
