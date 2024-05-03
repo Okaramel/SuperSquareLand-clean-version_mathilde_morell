@@ -91,10 +91,10 @@ public class HeroEntity : MonoBehaviour
         _ApplyHorizontalSpeed();
         _ApplyVerticalSpeed();
 
-       /* if (_CountDownDash > 0)
+        if (IsDashing == false)
         {
-            _UpdateSpeedDash();
-        }*/
+            _UpdateSpeedDash(horizontalMovementSettings);
+        }
     }
     private void _ChangeOrientFromHorizontalMovement()
     {
@@ -154,22 +154,28 @@ public class HeroEntity : MonoBehaviour
         }
     }
 
+
+    public bool IsDashing;
     public void _StartDash()
     {
         _CountDownDash = _dashSettings.duration;
     }
 
-   /* private void _UpdateSpeedDash(HeroHorizontalMovementSettings settings)
+   private void _UpdateSpeedDash(HeroHorizontalMovementSettings settings)
     {
-        if (_CountDownDash > 0f)
+        if (IsDashing == true)
         {
+            IsDashing = true;
             _CountDownDash -= Time.fixedDeltaTime;
             _horizontalSpeed = _dashSettings.speed;
         } else
         {
             _horizontalSpeed = settings.speedMax;
+           IsDashing = false;
         }
-    } */
+    }
+
+
 
     private void _ApplyFallGravity()
     {
