@@ -54,6 +54,13 @@ public class HeroEntity : MonoBehaviour
     [Header("Debug")]
     [SerializeField] private bool _guiDebug = false;
 
+    private void Awake()
+    {
+        _cameraFollowable = GetComponent<CameraFollowable>();
+        _cameraFollowable.FollowPositionX = _rigidbody.position.x;
+        _cameraFollowable.FollowPositionY = _rigidbody.position.y;
+    }
+
     public void SetMoveDirX(float dirX)
     {
         _moveDirX = dirX;
@@ -63,6 +70,7 @@ public class HeroEntity : MonoBehaviour
     {
 
         _ApplyGroundDetection();
+        _UpdateCameraFollowPosition();
 
         HeroHorizontalMovementSettings horizontalMovementSettings = _GetCurrentHorizontalMovementSettings();
         if (_AreOrientAndMovementOpposite())
@@ -91,10 +99,10 @@ public class HeroEntity : MonoBehaviour
         _ApplyHorizontalSpeed();
         _ApplyVerticalSpeed();
 
-        if (IsDashing == false)
+        /*if (IsDashing == false)
         {
             _UpdateSpeedDash(horizontalMovementSettings);
-        }
+        }*/
     }
     private void _ChangeOrientFromHorizontalMovement()
     {
@@ -276,10 +284,6 @@ public class HeroEntity : MonoBehaviour
         }
     }
 
-/*  private HeroHorizontalMovementSettings _GetCurrentHorizontalMovementsSettings() {
- *  return IsTouchingGround ? _groundHorizontalMovementsSettings : _airHorizontalMovementsSettings}*/
-
-
     private void Update()
     {
         _UpdateOrientVisual();
@@ -291,6 +295,19 @@ public class HeroEntity : MonoBehaviour
         newScale.x = _orientX;
         _orientVisualRoot.localScale = newScale;
     }
+
+    //Camera Follow
+    private CameraFollowable _cameraFollowable;
+
+    private void _UpdateCameraFollowPosition()
+    {
+        _cameraFollowable.FollowPositionX = _rigidbody.position.x;
+        if(IsTouchingGround && !IsJumping)
+        {
+            _cameraFollowable.FollowPositionY = _rigidbody.position.y;  
+        }
+    }
+
     private void OnGUI()
     {
         if (!_guiDebug) return;
@@ -313,4 +330,6 @@ public class HeroEntity : MonoBehaviour
         GUILayout.Label($"istouchingground {IsTouchingGround}");
         GUILayout.EndVertical();
     }
+
+
 }
